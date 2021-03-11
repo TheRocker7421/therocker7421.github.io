@@ -1,2 +1,0 @@
-# Common Images
-Common Images.

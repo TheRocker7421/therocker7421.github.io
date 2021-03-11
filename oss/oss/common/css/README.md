@@ -1,2 +1,0 @@
-# CSS Stylesheets
-CSS stylesheets.

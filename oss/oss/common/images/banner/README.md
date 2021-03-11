@@ -1,2 +1,0 @@
-# Banner files
-Banner files.
