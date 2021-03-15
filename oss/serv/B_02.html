@@ -141,8 +141,8 @@ function initPageCommon()
 
 	imagesPath = "/oss/oss/common/images/";
 	htmlPath = "/oss/oss/common/html";
-	ossPath = "/oss/serv/";
-	secureOssPath = "/oss/serv/";	
+	ossPath = "https://oss-auth.shop.wii.com/oss/serv/";
+	secureOssPath = "https://oss-auth.shop.wii.com/oss/serv/";	
 
 	ecTimeout = new ECTimeout(parseInt("60000"));
 	
@@ -924,7 +924,207 @@ function doNextPost() {
       1/1</div>
   </div>
 </div>
-<script>
+<div id="catalogFrame" class="catalogFrame">
+    <table height="400"><tr><td>
+    <!--  -----------------------------------------------------  -->
+<!--  Copyright 2005-2014 Acer Cloud Technology, Inc.        -->
+<!--  All Rights Reserved.                                   -->
+<!--                                                         -->
+<!--  This software contains confidential information and    -->
+<!--  trade secrets of Acer Cloud Technology, Inc.           -->
+<!--  Use, disclosure or reproduction is prohibited without  -->
+<!--  the prior express written permission of Acer Cloud     -->
+<!--  Technology, Inc.                                       -->
+<!--  -----------------------------------------------------  -->
+<!--  -----------------------------------------------------  -->
+<!--  Copyright 2005-2014 Acer Cloud Technology, Inc.        -->
+<!--  All Rights Reserved.                                   -->
+<!--                                                         -->
+<!--  This software contains confidential information and    -->
+<!--  trade secrets of Acer Cloud Technology, Inc.           -->
+<!--  Use, disclosure or reproduction is prohibited without  -->
+<!--  the prior express written permission of Acer Cloud     -->
+<!--  Technology, Inc.                                       -->
+<!--  -----------------------------------------------------  -->
+<script type="text/JavaScript">
+<!--
+
+function getSCAUserStatus(){
+  var isSilverSCA = "";
+  var isGoldSCA = "";
+  if(ecSupportsSession()){
+    isSilverSCA = ec.getSessionValue("silverStatus");
+            isGoldSCA = ec.getSessionValue("goldStatus");
+  }
+  if(isGoldSCA == "ACTIVATED"){
+      return "SCAGOLD";
+  }else if(isSilverSCA == "ACTIVATED"){
+      return "SCASILVER";
+  }else{
+      return "";
+  }
+}
+function getSCAUserDiscountType(){
+  var status = getSCAUserStatus();
+  if(status == "SCAGOLD") {
+      return ec.getSessionValue("goldDiscountType");
+  }else if(status == "SCASILVER"){
+      return ec.getSessionValue("silverDiscountType");
+  }else{
+      return "";
+  }
+}
+
+//-->
+</script>
+<!--  -----------------------------------------------------  -->
+<!--  Copyright 2005-2014 Acer Cloud Technology, Inc.        -->
+<!--  All Rights Reserved.                                   -->
+<!--                                                         -->
+<!--  This software contains confidential information and    -->
+<!--  trade secrets of Acer Cloud Technology, Inc.           -->
+<!--  Use, disclosure or reproduction is prohibited without  -->
+<!--  the prior express written permission of Acer Cloud     -->
+<!--  Technology, Inc.                                       -->
+<!--  -----------------------------------------------------  -->
+<script type="text/JavaScript">
+<!--
+
+
+function getICRUserStatus() {
+    var status ;
+
+    if ( ecSupportsSession() ){
+        status =  ec.getSessionValue("icrStatus");
+
+        if ( status == "ACTIVATED" || status == "COMPLETE" || status == "DISABLED" ){
+            return status ;
+        }
+    }
+
+    return "DISABLED";
+}
+
+function getICRUserDiscountType(){
+    var status;
+    if ( ecSupportsSession()){
+        status=getICRUserStatus();
+        if(status == "ACTIVATED"){
+            return ec.getSessionValue("icrDiscountType");
+        }
+    }
+    return "";
+}
+
+
+
+function isICRExpired(){
+    
+        trace("titleDetails is empty");
+        return true;
+        
+}
+//-->
+</script>
+
+<!--  -----------------------------------------------------  -->
+<!--  Copyright 2005-2014 Acer Cloud Technology, Inc.        -->
+<!--  All Rights Reserved.                                   -->
+<!--                                                         -->
+<!--  This software contains confidential information and    -->
+<!--  trade secrets of Acer Cloud Technology, Inc.           -->
+<!--  Use, disclosure or reproduction is prohibited without  -->
+<!--  the prior express written permission of Acer Cloud     -->
+<!--  Technology, Inc.                                       -->
+<!--  -----------------------------------------------------  -->
+<script type="text/JavaScript">
+<!--
+
+var supportSCA = ("false" == "true");
+
+function isScaGiftable(titleId) {
+	if(!supportSCA) {
+		return false;
+	}
+	if(titleId == null || titleId == "") {
+		return false;
+	}
+	if(getSCAUserStatus() == "") {
+		return false;
+	}
+
+	var scaGiftableTitlesString = ec.getSessionValue("scaGiftableList"); 
+	trace("giftTitle " + titleId); 
+	trace("scaGiftableList: " + scaGiftableTitlesString); 
+
+	if(scaGiftableTitlesString == null) {
+		return false;
+	}
+	
+	var scaGiftableTitleArray = scaGiftableTitlesString.split(","); 
+	var size = scaGiftableTitleArray.length; 
+	for(i=0; i<size; i++) { 
+		if(scaGiftableTitleArray[i] == titleId) { 
+			return true;
+		} 
+	} 
+
+	return false;
+}
+
+function getScaDiscount() {
+	if(!supportSCA) {
+		return "0";
+	}
+	var discountList = new Array(); 
+	discountList['SCA10']  = ec.getSessionValue("sca10DiscountAmount");
+	discountList['SCA20']  = ec.getSessionValue("sca20DiscountAmount");
+	discountList['SCA20B'] = ec.getSessionValue("sca20BDiscountAmount");
+
+	var discount = discountList[getSCAUserDiscountType()]; 
+	trace("SCA discount: " + discount); 
+	if((typeof(discount) != 'undefined') && (discount != "") && (discount != null)) {
+		return discount;
+	} else {
+		return "0";
+	}
+}
+
+function getScaPurchaseInfo(){
+	if(!supportSCA) {
+		return "";
+	}
+
+	var purchaseInfoList = new Array(); 
+	purchaseInfoList['SCA10']  = ec.getSessionValue("sca10DiscountXml");
+	purchaseInfoList['SCA20']  = ec.getSessionValue("sca20DiscountXml");
+	purchaseInfoList['SCA20B'] = ec.getSessionValue("sca20BDiscountXml");
+   
+	var purchaseInfo = purchaseInfoList[getSCAUserDiscountType()]; 
+	trace("SCA purchaseInfo: " + purchaseInfo);	
+	if((typeof(purchaseInfo) != 'undefined') && (purchaseInfo != null)) {
+		return purchaseInfo;
+	} else {
+		return "";
+	}
+}
+
+function getScaGiftDiscount(titleId) {
+	if(isScaGiftable(titleId)) {
+        return getScaDiscount();
+	 } else {
+		return "0";
+	}	
+}
+
+function getScaGiftPurchaseInfo(titleId) {
+	if(isScaGiftable(titleId)) {
+        return getScaPurchaseInfo();
+	} else {
+		return "";
+	}
+}
+
 function removeScaGiftableTitle(titleId) {
 	var scaGiftableTitlesString = ec.getSessionValue("scaGiftableList"); 
 	trace("scaGiftableList(old): " + scaGiftableTitlesString); 
@@ -952,5 +1152,208 @@ function getIcrPurchaseInfo() {
 }
 //-->
 </script>
+<script type="text/JavaScript">
+<!--
+	var giftTransTitles = null;
+	if (ecSupportsSession()) {
+	        giftTransTitles = ec.getSessionValue("giftTransTitles");
+	}
+	var giftsArray = new Array();
+	if (giftTransTitles != null) {
+		var gifts = giftTransTitles.split(", ");
+		for(i = 0; i < gifts.length; i++){
+			if (gifts[i] != "") {
+				var pair = gifts[i].split(":");
+				giftsArray[pair[0]] = pair[1];
+				trace("stored gift titleId: "+pair[0]+", transId: "+pair[1]);
+			}
+		}
+	}
+//-->
+</script>
+
+
+<!-- If trial internet channel, show B_02 with internet channel escape clause -->
+<a href="/oss/serv/D_01.html">
+    <div id="panel01" style="position:absolute; left:0px; top:24px; width:488px; height:91px; z-index:1">
+      <div class="contentsBlack" id="Platform">
+          Virtual Console</div>
+      <div class="contentsBlack" id="Publisher">
+          Nintendo</div>
+      <div style="overflow:hidden" nowrap id="TitleName1stline">
+	  <span id="title1_1" class="catalogTitleBlack_01">Super Mario 64</span>
+      </div>
+      
+      <div id="ImageforCatalogpage">
+        <img src="/oss/ccs/000100014E414145/FFFD0006" width="96" height="72" />
+        </div>
+      
+      <div id="UPDATE1" style="display:none">
+        <div id="NEW1"><img src="/oss/oss/common/images//banner/new_update.png" width="150" height="23" /></div>
+            <div class="headerBlueM" id="NEWtext1"><div align="center">Updated!</div></div>
+          </div>
+      
+      <div id="giftTitle1" style="display:none">
+        <div id="spacer">
+          <a href="javascript:showGiftTrans('')" target="_top" name="goTitleDetailsLink1">
+            <img name="ImageB1" src="/oss/oss/common/images//spacer.gif" width="488" height="91" border="0" 
+              onmouseover="MM_swapImage('Image1','','/oss/oss/common/images//banner/B_04_softbanner_b.gif',1);wiiFocusSound();" 
+              onmouseout="MM_swapImgRestore()" onclick="wiiSelectSound();"/>
+          </a>
+        </div>
+        <div id="points">
+          <div align="right" name="purchasePoint1" class="catalogTitleBlackBold">
+              Gift</div>
+        </div>
+      </div>
+      <div id="storedGiftTitle1" style="display:none">     
+        <div id="spacer">
+          <a id="giftAnchor1" href="" name="goTitleDetailsLink1">
+            <img name="ImageB1" src="/oss/oss/common/images//spacer.gif" width="488" height="91" border="0" 
+              onmouseover="MM_swapImage('Image1','','/oss/oss/common/images//banner/B_04_softbanner_b.gif',1);wiiFocusSound();" 
+              onmouseout="MM_swapImgRestore()" 
+              onclick="wiiSelectSound();"/>
+          </a>
+        </div>
+        <div id="points">
+          <div align="right" name="purchasePoint1" class="catalogTitleBlackBold">
+              Gift</div>
+        </div>
+      </div>
+      <div id="regularTitle1" style="display:none">
+        <div id="spacer">
+          <a href="javascript:showPage('B_05.jsp?titleId=0001000148435245')" target="_top" name="goTitleDetailsLink1">
+            <img name="ImageB1" src="/oss/oss/common/images//spacer.gif" width="488" height="91" border="0" 
+             onmouseover="MM_swapImage('Image1','','/oss/oss/common/images//banner/B_04_softbanner_b.gif',1);wiiFocusSound();" 
+             onmouseout="MM_swapImgRestore()" onclick="wiiSelectSound();"/>
+          </a>
+        </div>
+        
+        <div id="points">
+          <div align="right" name="purchasePoint1" class="catalogTitleBlackBold">
+          1,000 Wii Points</div>
+        </div>
+      </div>
+      <div id="scaTitle1" style="display:none">
+      </div>
+      <img id="ImageA1" src="/oss/oss/common/images//banner/B_04_softbanner_a.gif" name="Image1" width="488" height="91" border="0" id="Image1" />
+    </div>
+   </a> 	
+<script type="text/JavaScript">
+<!--
+	var giftTrans = '';
+	var titleId = '0001000148435245';
+	var transId = giftsArray[titleId];
+	
+	if ((giftTrans != null) && (giftTrans != "")) {
+		// list gifts only
+		document.getElementById("giftTitle1").style.display = '';
+	} else if (transId != null) {
+		// has pending gift(s). B-24 should be displayed instead of B-05 for the pending gift titles
+		document.getElementById("giftAnchor1").href = 'javascript:showGiftTrans('+transId+')';
+		document.getElementById("storedGiftTitle1").style.display = '';
+	} else {
+		// no pending gift
+		document.getElementById("regularTitle1").style.display = '';
+		var titleInfoVar = ec.getTitleInfo ('0001000148435245');
+		var latestVersion = parseInt('1');
+		if (isTitleUpdateAvailable(titleInfoVar, latestVersion)) {
+			document.getElementById('UPDATE1').style.display = ''; 
+		}
+		var titleLicense = getTitleLicense('0001000148435245');
+        //trace("SCATitleStatus"+getSCATitleStatus());
+		if (titleLicense == "Unlimited") {
+			// Already own this title
+			var len=document.getElementsByName('ImageB1').length;
+			if (len >0) {
+				for(j=0;j<len;j++) {
+					document.getElementsByName('ImageB1')[j].onmouseover = 'MM_swapImage("'+ 'Image1' + '","","' + '/oss/oss/common/images/' + '/banner/B_04_softbannerP_b.gif",1); wiiFocusSound();'; 
+				}
+			}
+	
+			len=document.getElementsByName('ImageA1').length;
+			if (len >0) {
+				for(j=0;j<len;j++) {
+				document.getElementsByName('ImageA1')[j].src = '/oss/oss/common/images//banner/B_04_softbannerP_a.gif'; 
+				}
+			}
+	
+			len=document.getElementsByName('purchasePoint1').length;
+			if (!titleInfoVar.isOnDevice || isTitleUpdateAvailable(titleInfoVar, latestVersion)) {
+				if (len >0) {
+					for(j=0;j<len;j++) {
+						document.getElementsByName('purchasePoint1')[j].innerHTML = 'Downloadable'; 
+					}
+				}
+			} else {
+				if (len >0) {
+					for(j=0;j<len;j++) {
+						document.getElementsByName('purchasePoint1')[j].innerHTML = 'Downloaded'; 
+					}
+				}
+			}
+
+
+            
+            if ( "SCAGOLD" == getSCAUserStatus() || "SCASILVER" == getSCAUserStatus() ){ 
+                if ( isScaGiftable(titleId) ) {
+                    len=document.getElementsByName('purchasePoint1').length;
+                    for(j=0;j<len;j++) {
+                        document.getElementsByName('purchasePoint1')[j].innerHTML = 'SCA Free Gift'; 
+                    }
+                }
+            }
+
+            
+
+
+		}else{
+            
+                    var icr_title_status        = '' ;
+                    var sca_title_gold_status   = '' ; 
+                    var sca_title_silver_status = '' ;
+
+                    if ( "ACTIVATED" == getICRUserStatus() && "ICR" == icr_title_status ) {
+                        len=document.getElementsByName('purchasePoint1').length;
+                        for(j=0;j<len;j++) {
+                            document.getElementsByName('purchasePoint1')[j].innerHTML = 'One Free Title';
+                        }
+                    } else if ( "SCAGOLD" == getSCAUserStatus() && "SCAGOLD" == sca_title_gold_status )
+                    {
+                        len=document.getElementsByName('purchasePoint1').length;
+                        for(j=0;j<len;j++) {
+                            document.getElementsByName('purchasePoint1')[j].innerHTML = 'Connection Ambassador 20'; 
+                        }
+                    } else if ( "SCASILVER" == getSCAUserStatus() && "SCASILVER" == sca_title_silver_status )
+                    {
+                        len=document.getElementsByName('purchasePoint1').length;
+                        for(j=0;j<len;j++) {
+                            document.getElementsByName('purchasePoint1')[j].innerHTML = 'Connection Ambassador 10'; 
+                        }
+                    } 
+
+                    
+        }
+	}
+//-->
+</script>
+
+</td></tr></table>
+    </div>
+  
+  <div id="icrExpirePage" style="display:none">
+  <div id="textIcrExpire">
+      <div align="center" class="contentsBlackM">
+          <table height="100%">
+              <tr>
+                  <td align="left" valign="middle">
+                      This offer has expired.<BR>You may no longer download a title for free.</td>
+              </tr>
+          </table>
+      </div>
+  </div>
+</div>
+
+
 </body>
 </html>
